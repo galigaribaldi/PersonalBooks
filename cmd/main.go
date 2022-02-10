@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/galigaribaldi/PersonalBooks/pkg/routes"
+	routes "github.com/galigaribaldi/PersonalBooks/pkg/routers"
 )
 
 func main() {

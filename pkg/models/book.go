@@ -6,3 +6,8 @@ type Book struct {
 	Author string `json: "author"`
 	Age    string `json: "age"`
 }
+type BookJson struct {
+	Title  string `json:"title"`
+	Author string `json: "author"`
+	Age    string `json: "age"`
+}
