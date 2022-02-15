@@ -7,6 +7,8 @@ import (
 
 func init() {
 	con.ConnectDatabase()
+	con.DB.AutoMigrate()
+	con.DB.AutoMigrate(&models.Book{})
 }
 func CreateBook(book models.Book) {
 	con.DB.Create(&book)
@@ -34,8 +36,13 @@ func DeleteBook(id int) {
 
 func UpdateBook(book models.Book) {
 	con.DB.Model(&book).Updates(models.Book{
-		Title:  book.Title,
-		Age:    book.Age,
-		Author: book.Author,
+		Title:            book.Title,
+		Author:           book.Author,
+		Editorial:        book.Editorial,
+		Saga:             book.Saga,
+		Numero_Paginas:   book.Numero_Paginas,
+		Anio_Publicacion: book.Anio_Publicacion,
+		Link_portada:     book.Link_portada,
+		Sinopsis:         book.Sinopsis,
 	})
 }

@@ -29,12 +29,7 @@ func bookPost(c *gin.Context) {
 		return
 	}
 	book.CreateBook(newBook)
-	c.JSON(http.StatusOK, gin.H{
-		"id":     newBook.Id,
-		"title":  newBook.Title,
-		"author": newBook.Author,
-		"Age":    newBook.Age,
-	})
+	c.JSON(http.StatusOK, newBook)
 }
 
 func getAllBook(c *gin.Context) {
@@ -53,5 +48,10 @@ func getBookById(c *gin.Context) {
 }
 
 func deleteBook(c *gin.Context) {
-	c.JSON(http.StatusOK, "POST")
+	ids, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "")
+	}
+	book.DeleteBook(ids)
+	c.JSON(http.StatusOK, "Book Delete")
 }
