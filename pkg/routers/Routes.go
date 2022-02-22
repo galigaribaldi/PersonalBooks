@@ -18,4 +18,7 @@ func getRouters() {
 	// Group 2 Author
 	v2 := router.Group("/v2")
 	addAuthorRoute(v2)
+	// Group 3 CommentBook
+	v3 := router.Group("/v3")
+	addCommentBookRoute(v3)
 }

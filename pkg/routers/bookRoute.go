@@ -11,9 +11,7 @@ import (
 
 func addBookRoute(rg *gin.RouterGroup) {
 	book := rg.Group("/book")
-	book.GET("/All", getAllBook)
-
-	book.GET("/Search", getBookById)
+	book.GET("/Search", getBook)
 	book.POST("/post", bookPost)
 
 	book.DELETE("/delete", deleteBook)
@@ -32,21 +30,6 @@ func bookPost(c *gin.Context) {
 	c.JSON(http.StatusOK, newBook)
 }
 
-func getAllBook(c *gin.Context) {
-	var newBook []models.Book
-	newBook = book.SelectAllBooks()
-	c.JSON(http.StatusOK, newBook)
-}
-
-func getBookById(c *gin.Context) {
-	//fmt.Println(c.PostForm("id")) //id FormData
-	ids, err := strconv.Atoi(c.Query("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, "")
-	}
-	c.JSON(http.StatusOK, book.SelectBooksById(ids))
-}
-
 func deleteBook(c *gin.Context) {
 	ids, err := strconv.Atoi(c.Query("id"))
 	if err != nil {
@@ -54,4 +37,27 @@ func deleteBook(c *gin.Context) {
 	}
 	book.DeleteBook(ids)
 	c.JSON(http.StatusOK, "Book Delete")
+}
+
+func getBook(c *gin.Context) {
+	//fmt.Println(c.PostForm("id")) //id FormData
+	nameBook := c.Query("nameBook")
+	ids, err := strconv.Atoi(c.Query("id"))
+	if err != nil && ids != 0 {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	//ID
+	if ids != 0 {
+		c.JSON(http.StatusOK, book.SelectBooksById(ids))
+		return
+	}
+	//Name
+	if nameBook != "" {
+		c.JSON(http.StatusOK, book.SelectBookByName(nameBook))
+		return
+	}
+	//All
+	c.JSON(http.StatusOK, book.SelectAllBooks())
+	return
 }

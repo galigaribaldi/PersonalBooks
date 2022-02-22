@@ -29,6 +29,14 @@ func SelectAuthorById(id int) models.Author {
 	return author
 }
 
+func SelectAuthorByName(name string) []models.Author {
+	var newAuthor []models.Author
+	if result := con.DB.Where("nombre LIKE ?", "%"+name+"%").Find(&newAuthor); result.Error != nil {
+		return newAuthor
+	}
+	return newAuthor
+}
+
 func DeleteAuthor(id int) {
 	var author models.Author
 	if result := con.DB.Delete(&author, id); result.Error != nil {

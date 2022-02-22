@@ -11,27 +11,34 @@ import (
 
 func addAuthorRoute(rg *gin.RouterGroup) {
 	author := rg.Group("/author")
-	author.GET("/All", getAllAuthor)
 
-	author.GET("/Search", getAuthorById)
+	author.GET("/Search", getAuthor)
 	author.POST("/post", authorPost)
 
 	author.DELETE("/delete", deleteAuthor)
 
 }
 
-func getAllAuthor(c *gin.Context) {
-	var newAuthor []models.Author
-	newAuthor = author.SelectAllAuthor()
-	c.JSON(http.StatusOK, newAuthor)
-}
-
-func getAuthorById(c *gin.Context) {
+func getAuthor(c *gin.Context) {
+	nameAuthor := c.Query("nameAuthor")
 	ids, err := strconv.Atoi(c.Query("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, "")
+	if err != nil && ids != 0 {
+		c.JSON(http.StatusBadRequest, err)
+		return
 	}
-	c.JSON(http.StatusOK, author.SelectAuthorById(ids))
+	//ID
+	if ids != 0 {
+		c.JSON(http.StatusOK, author.SelectAuthorById(ids))
+		return
+	}
+	//Name
+	if nameAuthor != "" {
+		c.JSON(http.StatusOK, author.SelectAuthorByName(nameAuthor))
+		return
+	}
+	//All
+	c.JSON(http.StatusOK, author.SelectAllAuthor())
+	return
 }
 
 func authorPost(c *gin.Context) {
